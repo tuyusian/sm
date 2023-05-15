@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Webduino Blockly App</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://simulator.webduino.io/dist/webduino-all.min.js"></script>
+<script src="https://simulator.webduino.io/dist/MessageTransport.min.js"></script>
+<script src="https://simulator.webduino.io/dist/webduino-blockly.min.js"></script>
+<script src="https://simulator.webduino.io/dist/lib/firebase.min.js"></script>
+<script src="https://simulator.webduino.io/dist/lib/runtime.min.js"></script>
+<script src="https://simulator.webduino.io/components/webduino-module-pinSetting/pinSetting.js"></script>
+<script src="https://simulator.webduino.io/components/webduino-module-pinSetting/pinSetting-blockly.js"></script>
+<title>Welcome</title>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 1.5rem;
+		}
+		button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 1.5rem;
+			margin: 10px;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+	<script>
+		function toggleLight(status) {
+			if (status === 'on') {
+				led.on();
+			} else if (status === 'off') {
+				led.off();
+			}
+		}
+	</script>
+
+</head>
+<body>
+    <h1>Welcome!</h1>
+	<p>Hello <span id="name"></span></p>
+	<button onclick="led.on()">開燈</button>
+	<button onclick="led.off()">關燈</button>
+    <script>
+		// Get the URL parameters
+		const urlParams = new URLSearchParams(window.location.search);
+		const name = urlParams.get('name');
+		const light = urlParams.get('light');
+		// Display the name
+		document.getElementById('name').textContent = name;
+		// Toggle the light based on the 'light' parameter
+		toggleLight(light);
+	</script>
+</body>
+
+<script>
+    var led;
+
+boardReady({board: 'Smart', device: 'YgxM2', transport: 'mqtt', multi: true}, function (board) {
+  board.systemReset();
+  board.samplingInterval = 50;
+  led = getLed(board, 5);
+  toggleLight(light);
+});
+
+</script>
